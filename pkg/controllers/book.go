@@ -21,10 +21,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func Create(w http.ResponseWriter, r *http.Request) {
   NewBook := &BookModel.Book{}
   utils.ParseBody(r, NewBook)
-  BookModel.CreateNewBook(NewBook)
+  books := BookModel.CreateNewBook(NewBook)
   w.WriteHeader(http.StatusOK)
   w.Header().Set("Content-Type", "application/json")
-  data, _ := json.Marshal(NewBook)
+  data, _ := json.Marshal(books)
   w.Write(data)
 }
 
@@ -37,3 +37,24 @@ func Delete(w http.ResponseWriter, r *http.Request){
   data, _ := json.Marshal(books)
   w.Write(data)
 }
+
+func Update(w http.ResponseWriter, r *http.Request){
+  UpdateBook := &BookModel.Book{}
+  utils.ParseBody(r, UpdateBook)
+  vars := mux.Vars(r)
+  id, _ := strconv.ParseInt(vars["id"], 0, 0)
+  book, db := BookModel.GetBookByID(id)
+
+  if UpdateBook.Name != "" && UpdateBook.Author != "" && UpdateBook.Publication != "" {
+    book.Name = UpdateBook.Name
+    book.Author = UpdateBook.Author
+    book.Publication = UpdateBook.Publication
+  }
+  db.Save(book)
+
+  w.WriteHeader(http.StatusOK)
+  w.Header().Set("Content-Type", "application/json")
+  data, _ := json.Marshal(book)
+  w.Write(data)
+}
+

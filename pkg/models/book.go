@@ -26,16 +26,16 @@ func GetAllBooks() []Book {
 	return Books
 }
 
-func CreateNewBook(b *Book) *Book{
+func CreateNewBook(b *Book) []Book{
   db.NewRecord(b)
   db.Create(&b)
-  return b
+  return GetAllBooks()
 } 
 
-func GetBookByID(ID int64) *Book{
+func GetBookByID(ID int64) (*Book, *gorm.DB){
   var book Book
-  db.Where("ID=?", ID).Find(&book)
-  return &book
+  db :=db.Where("ID=?", ID).Find(&book)
+  return &book, db
 }
 
 func DeleteBookByID(ID int64) []Book{
