@@ -8,4 +8,5 @@ import (
 func RegisterBookRoutes(router *mux.Router){
   router.HandleFunc("/books/", BookController.Index).Methods("GET")
   router.HandleFunc("/books/create", BookController.Create).Methods("POST")
+  router.HandleFunc("/books/delete/{id}", BookController.Delete).Methods("DELETE")
 }

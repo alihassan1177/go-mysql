@@ -31,3 +31,33 @@ func CreateNewBook(b *Book) *Book{
   db.Create(&b)
   return b
 } 
+
+func GetBookByID(ID int64) *Book{
+  var book Book
+  db.Where("ID=?", ID).Find(&book)
+  return &book
+}
+
+func DeleteBookByID(ID int64) []Book{
+  var book Book
+  db.Where("ID=?", ID).Delete(book)
+  return GetAllBooks()
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

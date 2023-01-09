@@ -3,9 +3,11 @@ package BookController
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/alihassan1177/go-mysql/pkg/models"
 	"github.com/alihassan1177/go-mysql/pkg/utils"
+	"github.com/gorilla/mux"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -23,5 +25,15 @@ func Create(w http.ResponseWriter, r *http.Request) {
   w.WriteHeader(http.StatusOK)
   w.Header().Set("Content-Type", "application/json")
   data, _ := json.Marshal(NewBook)
+  w.Write(data)
+}
+
+func Delete(w http.ResponseWriter, r *http.Request){
+  vars := mux.Vars(r)
+  id, _ := strconv.ParseInt(vars["id"], 0, 0)
+  books := BookModel.DeleteBookByID(id)
+  w.WriteHeader(http.StatusOK)
+  w.Header().Set("Content-Type", "application/json")
+  data, _ := json.Marshal(books)
   w.Write(data)
 }

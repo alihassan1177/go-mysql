@@ -13,7 +13,10 @@ var (
 )
 
 func Connect() {
-  godotenv.Load(".env")
+  envErr := godotenv.Load(".env")
+  if envErr != nil {
+    panic(envErr)
+  }
 	d, err := gorm.Open("mysql", os.Getenv("DB_DNS")) // Use your local DB
 	if err != nil {
 		panic(err)
